@@ -1,0 +1,12 @@
+# Method 1 Commands:
+sudo apt update && sudo apt upgrade
+wget debian-package-url
+sudo dpkg -i google-chrome-stable_current_amd64.deb
+dpkg -l | grep chrome
+
+# Method 2 Commands:
+wget -q -O - signing-key-URL | sudo apt-key add -
+sudo sh -c 'echo "deb [arch=amd64] http://dl.google.com/linux/chrome/deb/ stable main" > /etc/apt/sources.list.d/google.list'
+sudo apt update
+sudo apt install google-chrome-stable
+dpkg -l | grep chrome
