@@ -4,4 +4,6 @@ sudo systemctl enable nginx
 sudo systemctl start nginx
 sudo systemctl status nginx
 curl -I localhost
-curl <Enter public IP address>
+curl localhost
+curl ifconfig.me
+curl <Enter public IP address obtained from above command>
