@@ -1,0 +1,9 @@
+sudo apt update
+sudo apt install -y apache
+sudo systemctl enable apache2
+sudo systemctl start apache2
+sudo systemctl status apache2
+curl -I localhost
+curl localhost
+curl ifconfig.me
+curl <Enter public IP address obtained from above command>
