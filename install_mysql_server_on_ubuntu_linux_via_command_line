@@ -1,0 +1,8 @@
+sudo apt update
+sudo apt install mysql-server
+sudo systemctl status mysql
+sudo systemctl start mysql
+sudo ss -tap | grep mysql
+sudo journalctl -u mysql
+sudo mysql
+mysql> show databases;
