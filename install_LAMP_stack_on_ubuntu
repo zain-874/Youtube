@@ -1,0 +1,44 @@
+# update the system
+sudo apt update
+
+# Step 1: install Apache Web Server
+sudo apt install apache2 -y
+sudo systemctl status apache2
+curl -I 127.0.0.1 
+curl -I localhost
+curl ifconfig.me
+curl -I <public-ip>
+sudo ufw status
+
+# Step 2: install mysql-server
+sudo apt install mysql-server -y
+mysql --version
+sudo systemctl status mysql
+sudo mysql
+SELECT Host, User, authentication_string FROM mysql.user WHERE User = 'root';
+ALTER USER 'root'@'localhost' IDENTIFIED WITH caching_sha2_password BY 'securePassword!1';
+sudo mysql -u root -p
+sudo nano /root/.my.cnf
+
+# /root/.my.cnf file contents
+[client]
+user=root
+password="securePassword!1"
+
+sudo chmod 600 /root/.my.cnf
+sudo mysql_secure_installation
+
+# Step 3: install PHP
+sudo apt install php libapache2-mod-php php-mysql -y
+php -v
+
+# Step 4: Test LAMP stack installation
+sudo nano /var/www/html/info.php
+
+# /var/www/html/info.php file contents
+<?php
+phpinfo ();
+?>
+
+# type in browser
+<public-IP>/test.php
