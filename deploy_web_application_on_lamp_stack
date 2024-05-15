@@ -1,0 +1,84 @@
+# check versions of LAMP stack components
+lsb_release -d
+apache2 -v
+php -v
+mysql --version
+
+# Step 1: create database & users table
+sudo mysql
+show databases;
+CREATE DATABASE myapp_db;
+show databases;
+USE myapp_db;
+
+CREATE TABLE users (
+id INT AUTO_INCREMENT PRIMARY KEY,
+name VARCHAR(50),
+email VARCHAR(50),
+country VARCHAR(50)
+);
+
+show tables in myapp_db;
+
+# Step 2: create php application
+cd /var/www/html
+sudo mkdir -p myapp
+ls -l
+sudo nano myapp/index.php
+
+# myapp/index.php file contents
+<?php
+
+// initiating DB connection
+$mysqli = new mysqli("localhost", "root", "securePassword!1", "myapp_db");
+if ($mysqli->connect_errno) {
+echo "Failed to connect to MySQL: " . $mysqli->connect_error;
+exit();
+}
+
+// Inserting a new record
+$sql = "INSERT INTO users (name, email, country) VALUES ('Zain', 'zain@example.com', 'France')";
+if ($mysqli->query($sql) === TRUE) {
+echo "New record inserted successfully!";
+} else {
+echo "Error: " . $sql . "<br>" . $mysqli->error;
+}
+
+// Fetching all records
+$sql_select = "SELECT * FROM users";
+$result = $mysqli->query($sql_select);
+if ($result->num_rows > 0) {
+echo "<h2>Records from the users table of myapp_db:</h2>";
+while ($row = $result->fetch_assoc()) {
+echo "ID: " . $row["id"] . " - Name: " . $row["name"] . " - Email: " . $row["email"] . " - Country: " . $row["country"] . "<br>";
+}
+} else {
+echo "No records found in the users table";
+}
+
+//closing DB connection
+$mysqli->close();
+?>
+
+# Step 3: configure and enable virtualhost
+cd /etc/apache2/sites-available
+ls -l
+sudo nano myapp.conf
+
+# myapp.conf file contents
+<VirtualHost *:80>
+DocumentRoot /var/www/html/myapp
+ErrorLog ${APACHE_LOG_DIR}/error.log
+CustomLog ${APACHE_LOG_DIR}/access.log combined
+</VirtualHost>
+
+sudo a2ensite myapp
+sudo systemctl reload apache2
+ls -l
+sudo a2dissite 000-default
+sudo systemctl reload apache2
+
+sudo apache2ctl configtest
+
+# Step 4: access the application via browser
+<public IP> or localhost
